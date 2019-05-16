@@ -65,6 +65,7 @@ export default class App extends React.Component {
     });
   };
 
+ 
   renderTodo = ({text, id, done, deleteTodo, circle, drag: {x, y} = {}}, idx) => {
     const classes = ['task'];
     if (x && y) classes.push('dragging');
@@ -78,6 +79,7 @@ export default class App extends React.Component {
         <div className={classes.join(' ')} style={style} onMouseDown={this.dragStart(idx)} onClick={this.finishTodo(idx)}>
           <div className="task-circle-effect" style={circle && {top: circle.y, left: circle.x}} />
           <span>{text}</span>
+  	  <button onClick={this.deleteTodo(id)}><span>X</span></button>    
         </div>
       </F>
     );
@@ -118,11 +120,14 @@ export default class App extends React.Component {
   deleteAll = () => this.setState({todos: []});
 
   deleteTodo = id => {
+    return  e => {
     let todosCopy = this.state.todos.slice();
     let index = todosCopy.findIndex(todo => todo.id === id);
 
     todosCopy.splice(index, 1);
     this.setState({todos: todosCopy});
+    e.stopPropagation();
+    }
   }
 
   counter = this.state.todos.length +1;
